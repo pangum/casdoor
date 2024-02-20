@@ -5,6 +5,20 @@ get:
   name: token_github_storezhang
 ---
 
+kind: secret
+name: feishu_id
+get:
+  path: secrets
+  name: feishu_id
+---
+
+kind: secret
+name: feishu_secret
+get:
+  path: secrets
+  name: feishu_secret
+---
+
 
 kind: pipeline
 type: docker
@@ -20,7 +34,7 @@ environment:
 
 
 steps:
-  - name: 代码
+  - name: 取码
     image: ccr.ccs.tencentyun.com/dronestock/git
     pull: always
 
@@ -58,6 +72,19 @@ steps:
         tag: $${DRONE_TAG}
         token: $${TOKEN}
         body: file('$${CHANGELOG_TAG_OUTPUT}')
+
+  - name: 通知
+    image: ccr.ccs.tencentyun.com/dronestock/feishu
+    pull: always
+    when:
+      status:
+        - success
+        - failure
+    settings:
+      id:
+        from_secret: feishu_id
+      secret:
+        from_secret: feishu_secret
 
 
 volumes:
