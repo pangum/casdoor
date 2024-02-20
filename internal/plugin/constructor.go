@@ -28,17 +28,17 @@ func (c *Constructor) New(app *pangu.App, config *pangu.Config) (client *core.Cl
 func (c *Constructor) new(app *pangu.App, config *core.Config) (client *core.Client, err error) {
 	client = core.NewClient(config)
 	if nil != config.Callback {
-		err = c.initCallback(app, config.Callback)
+		err = c.initCallback(app, config.Callback, client)
 	}
 
 	return
 }
 
-func (c *Constructor) initCallback(app *pangu.App, config *config.Callback) (err error) {
+func (c *Constructor) initCallback(app *pangu.App, config *config.Callback, client *core.Client) (err error) {
 	if gie := app.Dependency().Get(c.httpServer).Build().Build().Inject(); nil != gie {
 		err = exception.New().Message("未引入服务器依赖，可以使用pangum/grpc等插件来引入").Build()
 	} else {
-		callback := core.NewCallback(config, c.mux)
+		callback := core.NewCallback(config, c.mux, client)
 		callback.Handle()
 	}
 

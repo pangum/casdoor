@@ -3,78 +3,59 @@ package core
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
-	"net/url"
 
+	"github.com/goexl/gox"
 	"github.com/pangum/casdoor/internal/config"
+	"github.com/pangum/casdoor/internal/internal/constant"
 )
 
 type Callback struct {
 	config *config.Callback
 	mux    *http.ServeMux
+	client *Client
 }
 
-func NewCallback(config *config.Callback, mux *http.ServeMux) *Callback {
+func NewCallback(config *config.Callback, mux *http.ServeMux, client *Client) *Callback {
 	return &Callback{
 		config: config,
 		mux:    mux,
+		client: client,
 	}
 }
 
 func (c *Callback) Handle() {
-	c.mux.HandleFunc(c.config.Path, c.serve)
+	c.mux.HandleFunc(gox.StringBuilder(constant.Slash, c.config.Path).String(), c.serve)
 }
 
 func (c *Callback) serve(writer http.ResponseWriter, req *http.Request) {
 	code := ""
 	state := ""
-	switch req.Method {
-	case "GET", "DELETE":
-		code, state = c.parseForm(&req.Form)
-	case "POST", "PUT":
-		code, state = c.parse(req)
-	}
-	fmt.Println(code, state)
-}
-
-func (c *Callback) parse(req *http.Request) (code string, state string) {
-	if body, gbe := req.GetBody(); nil != gbe {
-		code, state = c.parseForm(&req.PostForm)
+	if pfe := req.ParseForm(); nil != pfe {
+		// TODO 日志
 	} else {
-		code, state = c.parseBody(body)
+		code = req.Form.Get(c.config.Code)
+		state = req.Form.Get(c.config.State)
 	}
 
-	return
-}
-
-func (c *Callback) parseBody(body io.ReadCloser) (code string, state string) {
-	if bytes, rae := io.ReadAll(body); nil != rae {
-		// 不处理，后续步骤处理
+	if "" == code || "" == state {
+		// TODO 日志
 	} else {
-		code, state = c.parseJSON(&bytes)
+		c.parse(writer, code, state)
 	}
 
 	return
 }
 
-func (c *Callback) parseJSON(bytes *[]byte) (code string, state string) {
-	content := make(map[string]string)
-	if ue := json.Unmarshal(*bytes, &content); nil == ue {
-		code = content[c.config.Code]
-		state = content[c.config.State]
+func (c *Callback) parse(writer http.ResponseWriter, code string, state string) {
+	if token, gte := c.client.GetOAuthToken(code, state); nil != gte {
+		// TODO 日志
+		fmt.Println(gte)
+	} else if claims, pte := c.client.ParseJwtToken(token.AccessToken); nil != pte {
+		// TODO 日志
+		fmt.Println(pte)
+	} else {
+		bytes, _ := json.Marshal(claims)
+		writer.Write(bytes)
 	}
-
-	return
-}
-
-func (c *Callback) parseForm(form *url.Values) (code string, state string) {
-	if form.Has(c.config.Code) {
-		code = form.Get(c.config.Code)
-	}
-	if form.Has(c.config.State) {
-		state = form.Get(c.config.State)
-	}
-
-	return
 }

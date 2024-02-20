@@ -1,4 +1,4 @@
-package starter
+package casdoor
 
 import (
 	"github.com/pangum/casdoor/internal/plugin"

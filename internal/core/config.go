@@ -11,5 +11,5 @@ type Config struct {
 	Certificate  string           `json:"certificate,omitempty" yaml:"certificate" xml:"certificate" toml:"certificate" validate:"required,url"`
 	Organization string           `json:"organization,omitempty" yaml:"organization" xml:"organization" toml:"organization" validate:"required,url"`
 	Application  string           `json:"application,omitempty" yaml:"application" xml:"application" toml:"application" validate:"required,url"`
-	Callback     *config.Callback `json:"serve,omitempty" yaml:"serve" xml:"serve" toml:"serve"`
+	Callback     *config.Callback `json:"callback,omitempty" yaml:"callback" xml:"callback" toml:"callback"`
 }
