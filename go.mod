@@ -3,8 +3,9 @@ module github.com/pangum/casdoor
 go 1.21
 
 require (
-	github.com/casdoor/casdoor-go-sdk v0.35.1
+	github.com/casdoor/casdoor-go-sdk v0.36.0
 	github.com/goexl/exception v0.0.1
+	github.com/goexl/gox v0.3.8
 	github.com/pangum/pangu v0.4.5
 )
 
@@ -19,7 +20,6 @@ require (
 	github.com/goexl/baozheng v0.0.1 // indirect
 	github.com/goexl/env v0.0.2 // indirect
 	github.com/goexl/gfx v0.1.7 // indirect
-	github.com/goexl/gox v0.3.8 // indirect
 	github.com/goexl/log v0.0.7 // indirect
 	github.com/goexl/mengpo v0.2.5 // indirect
 	github.com/goexl/xiren v0.0.6 // indirect
