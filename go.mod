@@ -3,7 +3,7 @@ module github.com/pangum/casdoor
 go 1.21
 
 require (
-	github.com/casdoor/casdoor-go-sdk v0.37.0
+	github.com/casdoor/casdoor-go-sdk v0.39.0
 	github.com/goexl/exception v0.0.1
 	github.com/goexl/gox v0.3.8
 	github.com/pangum/pangu v0.4.5
@@ -26,7 +26,7 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
-	github.com/google/uuid v1.4.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-runewidth v0.0.15 // indirect
