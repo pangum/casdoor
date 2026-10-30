@@ -3,7 +3,7 @@ module github.com/pangum/casdoor
 go 1.23
 
 require (
-	github.com/casdoor/casdoor-go-sdk v1.46.0
+	github.com/casdoor/casdoor-go-sdk v1.59.0
 	github.com/goexl/exception v0.0.4
 	github.com/goexl/gox v1.9.2
 	github.com/pangum/pangu v0.4.5
